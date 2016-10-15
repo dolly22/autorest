@@ -5,28 +5,19 @@
 @using AutoRest.NodeJS.TemplateModels
 @inherits AutoRest.Core.Template<ModelTemplateModel>
 
-/**
- * @@class
- * Initializes a new instance of the @(Model.Name) class.
- * @@constructor
-@if (!String.IsNullOrEmpty(Model.Summary))
-{
-  @WrapComment(" * ", "@summary " + Model.Summary)@:
+@if (!String.IsNullOrWhiteSpace(Model.Summary) || !String.IsNullOrWhiteSpace(Model.Documentation)) {
+@:/**
+    @if (!String.IsNullOrEmpty(Model.Summary))
+    {
+      @WrapComment(" * ", "@summary " + Model.Summary)@:
+        }
+    @if (!String.IsNullOrEmpty(Model.Documentation))
+    {
+      @WrapComment(" * ", Model.Documentation)@:
 @: *
+    }
+@:*/
 }
-@if (!String.IsNullOrEmpty(Model.Documentation))
-{
-  @WrapComment(" * ", Model.Documentation)@:
-@: *
-}
-@foreach (var property in Model.DocumentationPropertyList)
-{
-    @ModelTemplateModel.ConstructPropertyDocumentation(
-              WrapComment(" * ", "@member {" + ModelTemplateModel.GetPropertyDocumentationType(property)
-                                             + "} " + ModelTemplateModel.GetPropertyDocumentationName(property)
-                                             + " " + ModelTemplateModel.GetPropertyDocumentationString(property)))
-}
- */
 @{
 
     if (Model.BaseModelType != null)
@@ -37,11 +28,13 @@
     {
 @:export interface @(Model.Name) {
     }
-    
-    var propertyList = new List<Property>(Model.Properties.Where(p => !p.IsConstant));
-    for (int i = 0; i < propertyList.Count; i++)
-    {
-  @:@(ModelTemplateModel.PropertyTS(propertyList[i], true));
+
+    foreach (var property in Model.Properties.Where(p => !p.IsConstant))
+    { 
+  @:/**
+        @WrapComment("   * ", property.Documentation)@:
+  @: */
+  @:@(ModelTemplateModel.PropertyTS(property, true));
     }
 
 @:}

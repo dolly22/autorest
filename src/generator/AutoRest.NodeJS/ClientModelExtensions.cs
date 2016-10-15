@@ -541,7 +541,10 @@ namespace AutoRest.NodeJS
             }
             else if (enumType != null)
             {
-                tsType = "string";
+                if (!enumType.ModelAsString)
+                    tsType = enumType.Name;
+                else
+                    tsType = "string";
             }
             else if (composite != null)
             {

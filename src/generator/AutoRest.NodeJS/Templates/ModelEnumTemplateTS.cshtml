@@ -1,0 +1,13 @@
+﻿@using System
+@using System.Linq
+@using System.Collections.Generic
+@using AutoRest.Core.ClientModel
+@using AutoRest.NodeJS.TemplateModels
+@inherits AutoRest.Core.Template<EnumType>
+
+
+@{
+    var enumValues = string.Join(" | ", Model.Values.Select(v => $"\"{v.Name}\""));
+
+@:export type @(Model.Name) = @(enumValues);
+}

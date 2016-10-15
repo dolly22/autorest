@@ -5,6 +5,11 @@
 @Header(" * ")
  */
 @EmptyLine
+@foreach (var model in Model.EnumTypes.Where(e => !e.ModelAsString)) {
+@EmptyLine
+@:@(Include(new ModelEnumTemplateTS(), model))
+}
+@EmptyLine
 @foreach (var model in Model.OrderedModelTemplateModels) {
 @EmptyLine
 @:@(Include(new ModelTemplateTS(), model))
